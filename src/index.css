@@ -1,0 +1,32 @@
+:root {
+  font-family: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #1f2a44;
+  background-color: #f5f8ff;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+p {
+  margin: 0 0 8px;
+}
+
+h2,
+h3,
+h4 {
+  margin: 0 0 8px;
+}
