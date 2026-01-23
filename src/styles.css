@@ -1,0 +1,269 @@
+:root {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: #1b1f3b;
+  background-color: #f6f8ff;
+  --primary: royalblue;
+  --panel-bg: #ffffff;
+  --border: rgba(65, 105, 225, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f6f8ff;
+  color: #1b1f3b;
+}
+
+a {
+  color: var(--primary);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  padding: 24px 32px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #4b4f6c;
+}
+
+.badge {
+  background: rgba(65, 105, 225, 0.1);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  padding: 0 24px 24px;
+  height: calc(100vh - 96px);
+}
+
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-panel {
+  flex: 0 0 25%;
+}
+
+.resume-panel {
+  flex: 1;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.panel-hint {
+  font-size: 12px;
+  color: #6f7494;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  line-height: 1.4;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: rgba(65, 105, 225, 0.15);
+  color: #1b1f3b;
+}
+
+.chat-bubble.assistant {
+  align-self: flex-start;
+  background: #f1f3ff;
+  color: #1b1f3b;
+}
+
+.chat-input {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.chat-input button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat-input button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resume-panel .resume-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.status {
+  color: #4b4f6c;
+  padding: 12px 0;
+}
+
+.status.error {
+  color: #b42318;
+}
+
+.resume-section h3 {
+  margin: 0 0 8px;
+  color: var(--primary);
+}
+
+.resume-card {
+  background: #f9faff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(65, 105, 225, 0.1);
+}
+
+.resume-card.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.resume-title h4 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.resume-title p {
+  margin: 4px 0 0;
+  color: #4b4f6c;
+}
+
+.meta-list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  color: #4b4f6c;
+}
+
+.mini-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(65, 105, 225, 0.12);
+  background: white;
+}
+
+.timeline-item + .timeline-item {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(65, 105, 225, 0.2);
+}
+
+.timeline-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-meta {
+  font-size: 13px;
+  color: #6f7494;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background: rgba(65, 105, 225, 0.12);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #1b1f3b;
+}
+
+.custom-block + .custom-block {
+  margin-top: 16px;
+}
+
+.custom-content h3 {
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .app-body {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .chat-panel,
+  .resume-panel {
+    flex: 1;
+    min-height: 420px;
+  }
+}
