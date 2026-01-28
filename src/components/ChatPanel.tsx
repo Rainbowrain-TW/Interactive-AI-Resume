@@ -20,7 +20,7 @@ const initialMessages: ChatMessage[] = [
 ];
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbw70DnEuCZpTfNM-yh2P5HJS8g0oOd3OYWQBs8mXx2FGCObNlVM_S_OIAwt2O92fofu/exec';
+  'https://script.google.com/macros/s/AKfycbxBeg1kmR8ODmcNIn2t3FxcDku0cfb_gXyzBMVqw9J0EyKuE3LJr9BxBOLkQBVBQS2i/exec';
 
 const CID_KEY = 'interactive-ai-resume-cid';
 const SID_KEY = 'interactive-ai-resume-sid';
