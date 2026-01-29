@@ -105,6 +105,8 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
     getSessionValue(PREVIOUS_RESPONSE_KEY, 'none')
   );
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const hideMenuTimerRef = useRef<number | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const canSend = useMemo(() => input.trim().length > 0 && !isLoading, [input, isLoading]);
 
@@ -115,6 +117,38 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
   const updatePreviousResponseId = (nextId: string) => {
     setPreviousResponseId(nextId);
     sessionStorage.setItem(PREVIOUS_RESPONSE_KEY, nextId);
+  };
+
+  const clearHideMenuTimer = () => {
+    if (hideMenuTimerRef.current) {
+      window.clearTimeout(hideMenuTimerRef.current);
+      hideMenuTimerRef.current = null;
+    }
+  };
+
+  const scheduleHideMenu = () => {
+    clearHideMenuTimer();
+    hideMenuTimerRef.current = window.setTimeout(() => {
+      setIsMenuOpen(false);
+    }, 300);
+  };
+
+  const handleMenuButtonEnter = () => {
+    clearHideMenuTimer();
+    setIsMenuOpen(true);
+  };
+
+  const handleMenuButtonLeave = () => {
+    scheduleHideMenu();
+  };
+
+  const handleMenuEnter = () => {
+    clearHideMenuTimer();
+    setIsMenuOpen(true);
+  };
+
+  const handleMenuLeave = () => {
+    scheduleHideMenu();
   };
 
   const sendMessageWithContent = async (content: string, clearInput = false) => {
@@ -275,10 +309,23 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
         </button>
       </form>
       <div className="action-widget" aria-label="工具">
-        <button type="button" className="action-widget-button" aria-label="開啟工具">
+        <button
+          type="button"
+          className="action-widget-button"
+          aria-label="開啟工具"
+          onMouseEnter={handleMenuButtonEnter}
+          onMouseLeave={handleMenuButtonLeave}
+          onFocus={handleMenuButtonEnter}
+          onBlur={handleMenuButtonLeave}
+        >
           ☰
         </button>
-        <div className="action-widget-menu" role="menu">
+        <div
+          className={`action-widget-menu ${isMenuOpen ? 'is-open' : ''}`}
+          role="menu"
+          onMouseEnter={handleMenuEnter}
+          onMouseLeave={handleMenuLeave}
+        >
           <a className="action-widget-link" href={resumePdfUrl} download>
             下載履歷PDF
           </a>

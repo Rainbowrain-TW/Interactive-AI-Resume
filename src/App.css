@@ -209,8 +209,7 @@
   transition: all 0.2s ease;
 }
 
-.action-widget-button:hover + .action-widget-menu,
-.action-widget-button:focus-visible + .action-widget-menu {
+.action-widget-menu.is-open {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
