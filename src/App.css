@@ -12,8 +12,8 @@
 }
 
 .chat-panel {
-  width: 25%;
-  min-width: 240px;
+  width: 50%;
+  min-width: 280px;
   border-right: 1px solid rgba(65, 105, 225, 0.2);
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
 }
 
 .resume-wrapper {
-  width: 75%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -59,10 +59,21 @@
   border-radius: 12px;
   padding: 12px 14px;
   line-height: 1.5;
+  max-width: 80%;
 }
 
 .chat-message.user {
   background: rgba(65, 105, 225, 0.16);
+  align-self: flex-end;
+}
+
+.chat-message.assistant {
+  align-self: flex-start;
+}
+
+.chat-message p {
+  margin: 0;
+  white-space: pre-wrap;
 }
 
 .chat-role {
@@ -104,6 +115,40 @@
   cursor: not-allowed;
 }
 
+.quick-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quick-questions-title {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #51608a;
+  font-weight: 600;
+}
+
+.quick-questions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-question {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(65, 105, 225, 0.25);
+  background: rgba(65, 105, 225, 0.08);
+  color: #1f2a44;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.quick-question:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .chat-loading {
   display: inline-flex;
   gap: 6px;
@@ -125,6 +170,65 @@
 
 .chat-loading .dot:nth-child(3) {
   animation-delay: 0.4s;
+}
+
+.action-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 20;
+}
+
+.action-widget-button {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: royalblue;
+  color: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(65, 105, 225, 0.3);
+}
+
+.action-widget-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 12px 24px rgba(31, 42, 68, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+}
+
+.action-widget-button:hover + .action-widget-menu,
+.action-widget-button:focus-visible + .action-widget-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.action-widget-link {
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #1f2a44;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 4px 6px;
+}
+
+.action-widget-link:hover {
+  color: royalblue;
 }
 
 @keyframes chat-bounce {

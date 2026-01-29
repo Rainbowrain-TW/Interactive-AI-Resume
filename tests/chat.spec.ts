@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 const API_URL =
-    'https://script.google.com/macros/s/AKfycbzC0ByMSGuOuF3o5RhMKCTG_k6vAI_x-xoKohZO1EHC4uK5HE57FmPb1pSCb74wlOIW/exec';
+    'https://script.google.com/macros/s/AKfycbxtiajVpb8kqLr-iKmWnVa1_BJtgwiEUDbPAHrvllhKkGb8U2Obsx_lZKSvI8iB-wSI/exec';
 
 const getStorageValue = async (page, key: string, type: 'local' | 'session') => {
     return page.evaluate(

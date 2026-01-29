@@ -15,8 +15,15 @@ const initialMessages: ChatMessage[] = [
   {
     id: 'welcome',
     role: 'assistant',
-    content: '嗨！我是你的履歷助手，歡迎問我關於工作經驗、技能或專案的問題。'
+    content: '嗨！我是你的履歷助手，歡迎問我關於 Johnny 的工作經驗、技能或專案等問題。'
   }
+];
+
+const quickQuestions = [
+  'Johnny 是一位怎麼樣的工程師？',
+  '介紹一下這個互動式 AI 履歷？',
+  '高雄有什麼好吃的？',
+  'Johnny 的專長是什麼？'
 ];
 
 const API_URL =
@@ -62,6 +69,32 @@ const getSessionValue = (key: string, fallback: string) => {
   return fallback;
 };
 
+const formatTimestamp = (date: Date) => {
+  const pad = (value: number) => value.toString().padStart(2, '0');
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1);
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+};
+
+const buildChatLog = (messages: ChatMessage[]) => {
+  if (messages.length === 0) {
+    return '（目前沒有對話內容）';
+  }
+  return messages
+    .reduce<string[]>((segments, message, index) => {
+      const label = message.role === 'user' ? '你' : 'AI';
+      segments.push(`${label}: ${message.content}`);
+      if (index < messages.length - 1) {
+        segments.push(message.role === 'user' ? '--' : '==');
+      }
+      return segments;
+    }, [])
+    .join('\n\n');
+};
+
 const ChatPanel = ({ resume }: ChatPanelProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState('');
@@ -84,12 +117,11 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
     sessionStorage.setItem(PREVIOUS_RESPONSE_KEY, nextId);
   };
 
-  const sendMessage = async () => {
-    if (!canSend) {
+  const sendMessageWithContent = async (content: string, clearInput = false) => {
+    const messageContent = content.trim();
+    if (isLoading || !messageContent) {
       return;
     }
-
-    const messageContent = input.trim();
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       role: 'user',
@@ -97,7 +129,9 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInput('');
+    if (clearInput) {
+      setInput('');
+    }
     setIsLoading(true);
 
     try {
@@ -146,15 +180,45 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    void sendMessage();
+    void sendMessageWithContent(input, true);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      void sendMessage();
+      void sendMessageWithContent(input, true);
     }
   };
+
+  const handleQuickQuestion = (question: string) => {
+    void sendMessageWithContent(question, true);
+  };
+
+  const handleDownloadChat = () => {
+    const timestamp = formatTimestamp(new Date());
+    const chatLog = buildChatLog(messages);
+    const body =
+      `Hi, 感謝您來使用我的互動式 AI 履歷.\n\n` +
+      `這裡是我的公開資訊，歡迎來信聊聊。\n\n` +
+      `Johnny Zhou 互動式 AI 履歷連結：https://rainbowrain-tw.github.io/Interactive-AI-Resume/\n` +
+      `如果您在尋找合作伙伴：https://johnny-ai365-vibecoding-30days.github.io/day10-no.120-Landing-Page/\n` +
+      `連絡方式： rainbowrain0930@gmail.com\n\n` +
+      `--\n\n` +
+      `[對話記錄][${timestamp}]\n` +
+      `${chatLog}`;
+
+    const blob = new Blob([body], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'JohnnyJhou_AI-Resume-Chat.md';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const resumePdfUrl = `${import.meta.env.BASE_URL}JohnnyJhou.pdf`;
 
   return (
     <section className="panel chat-panel">
@@ -181,6 +245,22 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
         )}
         <div ref={messagesEndRef} />
       </div>
+      <div className="quick-questions" aria-label="快速提問">
+        <p className="quick-questions-title">快速提問</p>
+        <div className="quick-questions-list">
+          {quickQuestions.map((question) => (
+            <button
+              key={question}
+              type="button"
+              className="quick-question"
+              onClick={() => handleQuickQuestion(question)}
+              disabled={isLoading}
+            >
+              {question}
+            </button>
+          ))}
+        </div>
+      </div>
       <form className="chat-input" onSubmit={handleSubmit}>
         <textarea
           placeholder="輸入問題..."
@@ -194,6 +274,27 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
           {isLoading ? '回覆中' : '送出'}
         </button>
       </form>
+      <div className="action-widget" aria-label="工具">
+        <button type="button" className="action-widget-button" aria-label="開啟工具">
+          ☰
+        </button>
+        <div className="action-widget-menu" role="menu">
+          <a className="action-widget-link" href={resumePdfUrl} download>
+            下載履歷PDF
+          </a>
+          <button type="button" className="action-widget-link" onClick={handleDownloadChat}>
+            下載對話記錄
+          </button>
+          <a
+            className="action-widget-link"
+            href="https://johnny-ai365-vibecoding-30days.github.io/day10-no.120-Landing-Page/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LandingPage
+          </a>
+        </div>
+      </div>
     </section>
   );
 };
