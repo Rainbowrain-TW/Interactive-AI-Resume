@@ -528,11 +528,11 @@
     height: 55vh;
   }
 
-  .chat-panel.is-collapsed + .resume-wrapper {
+  .chat-panel.is-collapsed+.resume-wrapper {
     height: calc(100vh - 90px);
   }
 
-  .chat-panel.is-expanded + .resume-wrapper {
+  .chat-panel.is-expanded+.resume-wrapper {
     height: 5vh;
   }
 

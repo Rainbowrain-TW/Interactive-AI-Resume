@@ -329,9 +329,8 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
 
   return (
     <section
-      className={`panel chat-panel ${
-        chatSize === 'collapsed' ? 'is-collapsed' : chatSize === 'expanded' ? 'is-expanded' : ''
-      }`}
+      className={`panel chat-panel ${chatSize === 'collapsed' ? 'is-collapsed' : chatSize === 'expanded' ? 'is-expanded' : ''
+        }`}
     >
       <header className="panel-header">
         <div className="chat-header">
