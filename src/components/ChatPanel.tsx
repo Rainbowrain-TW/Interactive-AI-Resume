@@ -9,6 +9,7 @@ interface ChatMessage {
 
 interface ChatPanelProps {
   resume?: ResumeData;
+  onOpenIntro?: () => void;
 }
 
 const initialMessages: ChatMessage[] = [
@@ -126,7 +127,7 @@ const renderMessageContent = (content: string) => {
   );
 };
 
-const ChatPanel = ({ resume }: ChatPanelProps) => {
+const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -369,6 +370,9 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
           <a className="action-widget-link" href={resumePdfUrl} download>
             下載履歷PDF
           </a>
+          <button type="button" className="action-widget-link" onClick={onOpenIntro}>
+            查看說明
+          </button>
           <button type="button" className="action-widget-link" onClick={handleDownloadChat}>
             下載對話記錄
           </button>
