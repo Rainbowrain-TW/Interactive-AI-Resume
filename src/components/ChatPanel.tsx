@@ -370,20 +370,12 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
           <a className="action-widget-link" href={resumePdfUrl} download>
             下載履歷PDF
           </a>
-          <button type="button" className="action-widget-link" onClick={onOpenIntro}>
-            查看說明
-          </button>
           <button type="button" className="action-widget-link" onClick={handleDownloadChat}>
             下載對話記錄
           </button>
-          <a
-            className="action-widget-link"
-            href="https://johnny-ai365-vibecoding-30days.github.io/day10-no.120-Landing-Page/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            LandingPage
-          </a>
+          <button type="button" className="action-widget-link" onClick={onOpenIntro}>
+            查看說明
+          </button>
         </div>
       </div>
     </section>
