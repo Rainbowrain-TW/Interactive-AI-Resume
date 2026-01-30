@@ -23,6 +23,9 @@
 - **首次使用提示**：提供使用方式與隱私告知，支援「下次不再顯示」（本機儲存設定）。
 - **使用者識別（會話延續）**：首次進站建立 `cid`（localStorage）與 `sid`（sessionStorage），並使用 `previous_response_id` 支援多輪對話延續。
 
+## 限制與免責
+本系統採用 In-Context Learning 架構，基於兩萬餘字的真實履歷文本進行回答，並已導入 Prompt Guardrails 約束模型邊界。然而，生成式 AI 仍可能受原生訓練數據影響，存在「正面偏誤（Positive Bias）」或偶發性幻覺。如感到 AI 回覆內容有過度美化或與事實不符之處，請以原始履歷內容為準或保留對話記錄並與我進行核對。
+
 ## Mock AI 說明
 
 目前前端已改為實際串接 GAS API；`src/lib/llmClient.ts` 保留作為本地 Mock 參考（方便在不依賴後端時調整 UI 與對話狀態）。
