@@ -1,63 +1,48 @@
-# 互動式 AI 履歷 PoC (Vite + React + TypeScript)
+# 互動式 AI 履歷（Vite + React + TypeScript）
 
-這是一個「互動式 AI 履歷」的 PoC，左側為 Chat Panel，右側為 Resume Panel，並且已內建 GitHub Pages 自動部署設定。
+一個把「履歷」做成可互動產品的實驗：左側直接瀏覽履歷內容，右側透過聊天向 AI 詢問我的經歷、技能與專案細節。  
+前端為單頁應用（SPA），後端使用 Google Apps Script（GAS），並以 Google Spreadsheet 保存必要的對話與分析 Logs；同時內建 GitHub Pages 自動部署設定。
+
+## 專案 DEMO
+
+[Live Demo](https://rainbowrain-tw.github.io/Interactive-AI-Resume/)
+
+<p>
+	<img src="doc/IAR_Desktop.png" alt="Desktop Demo" width="60%" />
+	<img src="doc/IAR_Mobile.png" alt="Mobile Demo" width="35%" />
+</p>
+
 
 ## 功能特色
 
-- **單頁 Web App**：左側 Chat (25%) / 右側 Resume (75%)，兩側獨立捲動。
-- **RWD**：螢幕寬度 <= 768px 時改為上下堆疊。
-- **履歷渲染**：從 `public/resume.json` 載入履歷，支援 `hidden: true` 過濾。
-- **XSS 防護**：HTML 字串會經 DOMPurify 清洗後再渲染。
-- **Mock AI**：預留 `src/lib/llmClient.ts` 介面，可替換成 OpenAI/Gemini 等 LLM。
-
-## 專案啟動
-
-```bash
-npm ci
-npm run dev
-```
-
-> 開發模式啟動後，首頁會自動載入 `public/resume.json` 並顯示「Chat/Resume」雙欄。
-
-## Build
-
-```bash
-npm run build
-```
-
-## GitHub Pages 部署
-
-### 1) 設定 GitHub Pages Source
-
-首次部署時，請到 GitHub 專案頁面：
-
-`Settings → Pages → Source` 選擇 **GitHub Actions**。
-
-> 若無法透過 API 自動設定（例如沒有權限/Token），請手動完成此步驟。
-
-### 2) 自動部署流程
-
-- Push 到 `main` 會觸發 `.github/workflows/deploy.yml`
-- 使用官方 Pages Actions：
-  - `actions/upload-pages-artifact`
-  - `actions/deploy-pages`
-
-### 3) 查看部署網址
-
-Actions 的 job 會輸出 `page_url`，即為你的部署網址。
-
-## GitHub Pages base 自動判斷
-
-`vite.config.ts` 會依 `process.env.GITHUB_REPOSITORY` 自動設定 base：
-
-- User pages：`<owner>.github.io` → base = `/`
-- Project pages：`<owner>/<repo>` → base = `/<repo>/`
-
-## 履歷資料來源
-
-- 根目錄的 `johnny-zhou_20260121_0016.json` 已複製到 `public/resume.json`
-- 前端使用 `fetch(`${import.meta.env.BASE_URL}resume.json`)` 載入
+- **單頁 Web App**：左右雙欄（1:1）佈局，聊天與履歷各自捲動，互不干擾。
+- **RWD**：螢幕寬度 <= 768px 時改為上下堆疊；聊天區支援尺寸切換（預設／放大／收合）。
+- **履歷渲染**：從 `public/resume.json` 載入履歷資料，支援 `hidden: true` 過濾（用於隱藏不想曝光的項目）。
+- **XSS 防護**：可能含 HTML 的內容會先經 DOMPurify 清洗後再渲染，避免注入風險。
+- **對話體驗**：Shift + Enter 換行、回覆等待動畫、快速提問、工具卡片（下載 PDF／匯出對話記錄／查看說明）。
+- **首次使用提示**：提供使用方式與隱私告知，支援「下次不再顯示」（本機儲存設定）。
+- **使用者識別（會話延續）**：首次進站建立 `cid`（localStorage）與 `sid`（sessionStorage），並使用 `previous_response_id` 支援多輪對話延續。
 
 ## Mock AI 說明
 
-目前為簡易關鍵字比對，從履歷內容抓取摘要回覆。未來可替換 `src/lib/llmClient.ts` 以接入 OpenAI / Gemini 等模型。
+目前前端已改為實際串接 GAS API；`src/lib/llmClient.ts` 保留作為本地 Mock 參考（方便在不依賴後端時調整 UI 與對話狀態）。
+
+## 系統架構與技術
+
+### 前端
+- **Vite + React + TypeScript**
+- **DOMPurify**：防止 XSS
+- **Material Symbols**：手機縮放控制圖示
+- **本機狀態與儲存**：localStorage / sessionStorage
+
+### 後端（Google Apps Script）
+- **API 調用**：接收前端對話請求，轉送至 LLM 並回傳結果
+- **Prompt 組合（In-Context Learning）**：將履歷重點、回答規則與對話狀態組成提示詞，以強化上下文理解與行為約束
+- **Prompt Caching**：透過固定前綴 + `previous_response_id` 降低重送上下文的比例，減少 Input Token 成本
+- **Log 記錄**：延遲時間、Token 分析、成本分析（用於除錯與優化）
+
+### 資料庫（Google Spreadsheet）
+- 儲存對話與分析資料（Logs）
+
+### 模型
+- **gpt-5-mini**
