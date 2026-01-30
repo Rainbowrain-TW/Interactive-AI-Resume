@@ -139,6 +139,8 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const hideMenuTimerRef = useRef<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [chatSize, setChatSize] = useState<'default' | 'collapsed' | 'expanded'>('default');
+  const [isQuickQuestionsOpen, setIsQuickQuestionsOpen] = useState(false);
 
   const canSend = useMemo(() => input.trim().length > 0 && !isLoading, [input, isLoading]);
 
@@ -182,6 +184,36 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   const handleMenuLeave = () => {
     scheduleHideMenu();
   };
+
+  const getNextChatSize = (current: 'default' | 'collapsed' | 'expanded') => {
+    if (current === 'default') {
+      return 'expanded';
+    }
+    if (current === 'expanded') {
+      return 'collapsed';
+    }
+    return 'default';
+  };
+
+  const nextChatSize = getNextChatSize(chatSize);
+
+  const handleToggleChatSize = () => {
+    setChatSize(nextChatSize);
+  };
+
+  const chatSizeIcon =
+    nextChatSize === 'expanded'
+      ? 'keyboard_double_arrow_down'
+      : nextChatSize === 'collapsed'
+        ? 'minimize'
+        : 'keyboard_arrow_down';
+
+  const chatSizeLabel =
+    nextChatSize === 'expanded'
+      ? '切換為放大'
+      : nextChatSize === 'collapsed'
+        ? '切換為收合'
+        : '切換為預設';
 
   const sendMessageWithContent = async (content: string, clearInput = false) => {
     const messageContent = content.trim();
@@ -296,10 +328,28 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   const resumePdfUrl = `${import.meta.env.BASE_URL}JohnnyJhou.pdf`;
 
   return (
-    <section className="panel chat-panel">
+    <section
+      className={`panel chat-panel ${
+        chatSize === 'collapsed' ? 'is-collapsed' : chatSize === 'expanded' ? 'is-expanded' : ''
+      }`}
+    >
       <header className="panel-header">
-        <h2>Chat</h2>
-        <p>AI 回覆</p>
+        <div className="chat-header">
+          <div>
+            <h2>Chat</h2>
+            <p>AI 回覆</p>
+          </div>
+          <button
+            type="button"
+            className="chat-toggle"
+            onClick={handleToggleChatSize}
+            aria-label={chatSizeLabel}
+          >
+            <span className="material-symbols-outlined" aria-hidden="true">
+              {chatSizeIcon}
+            </span>
+          </button>
+        </div>
       </header>
       <div className="chat-messages" aria-live="polite">
         {messages.map((message) => (
@@ -320,8 +370,22 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="quick-questions" aria-label="快速提問">
-        <p className="quick-questions-title">快速提問</p>
+      <div
+        className={`quick-questions ${isQuickQuestionsOpen ? 'is-open' : 'is-collapsed'}`}
+        aria-label="快速提問"
+      >
+        <div className="quick-questions-header">
+          <p className="quick-questions-title">快速提問</p>
+          <button
+            type="button"
+            className="quick-questions-toggle"
+            onClick={() => setIsQuickQuestionsOpen((prev) => !prev)}
+            aria-expanded={isQuickQuestionsOpen}
+            aria-label={isQuickQuestionsOpen ? '收合快速提問' : '展開快速提問'}
+          >
+            {isQuickQuestionsOpen ? '－' : '＋'}
+          </button>
+        </div>
         <div className="quick-questions-list">
           {quickQuestions.map((question) => (
             <button
