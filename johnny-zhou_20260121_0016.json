@@ -91,7 +91,7 @@
               "url": "https://www.pilotgaea.com.tw/",
               "label": ""
             },
-            "description": "<ul><li><p>負責國家高速網路中心-三維共構平台專案技術維護，以 JavaScript 開發3D GIS 應用與 VR 多人連線會議室。</p></li><li><p>擔任公司對外技術講師，協助客戶採用公司SDK產品進行大型政府土木與地政專案開發。</p></li><li><p>負責公司所有新進工程師的訓練與考核，建立公司文件知識管理與教育訓練制度。</p></li></ul>"
+            "description": "<ul><li><p>負責國家高速網路中心-三維共構平台專案技術維護，以 JavaScript 開發 3D GIS 應用與 VR 多人連線會議室。</p></li><li><p>擔任公司對外技術講師，協助客戶採用公司 SDK 產品進行大型政府土木與地政專案開發。</p></li><li><p>負責公司所有新進工程師的訓練與考核，建立公司文件知識管理與教育訓練制度。</p></li></ul>"
           },
           {
             "id": "t3znzex7xnelpy72ly3uffi9",
@@ -104,7 +104,7 @@
               "url": "https://www.boyuda.com.tw/",
               "label": ""
             },
-            "description": "<ul><li><p>以 C# Winform 開發自助點餐機在國道休息區提供快捷的服務分擔尖峰時間的排隊人潮，用Socket及MutliThread 技術實現一單多店交易。</p></li><li><p>從零到有以樹莓派及 Node.js 為中心整合AI感測器開發人流統計系統及多媒體空氣品質看板，降低50%產品成本。</p></li><li><p>協助分析改善千萬量級資料的查詢模式，加快查詢速度 30 倍以上。</p></li><li><p>主導引入 Git 版控流程增進團隊協作效率。</p></li></ul>"
+            "description": "<ul><li><p>以 C# Winform 開發自助點餐機在國道休息區提供快捷的服務分擔尖峰時間的排隊人潮，用 Socket 及 MutliThread 技術實現一單多店交易。</p></li><li><p>從零到有以樹莓派及 Node.js 為中心整合AI感測器開發人流統計系統及多媒體空氣品質看板，降低 50% 產品成本。</p></li><li><p>協助分析改善千萬量級資料的查詢模式，加快查詢速度 30 倍以上。</p></li><li><p>主導引入 Git 版控流程增進團隊協作效率。</p></li></ul>"
           },
           {
             "id": "lan8gbxss0qv4ml5q78s3k3y",
@@ -117,7 +117,7 @@
               "url": "https://www.isunfar.com.tw/",
               "label": ""
             },
-            "description": "<ul><li><p>以 ElectronJS 搭配單板電腦開發智慧型數位看板，可遠端操控、即時監控 及透過 UART 線控機制管理數位顯示器。</p></li><li><p>使用 NodeJS 開發爬蟲工具每日更新全國郵政與金融機構最新資訊。</p></li></ul>"
+            "description": "<ul><li><p>以 ElectronJS 搭配單板電腦開發智慧型數位看板，可遠端操控、即時監控及透過 UART 線控機制管理數位顯示器。</p></li><li><p>使用 NodeJS 開發爬蟲工具每日更新全國郵政與金融機構最新資訊。</p></li></ul>"
           },
           {
             "id": "o5zwm358ok68aaltsqf01ebl",
@@ -130,7 +130,7 @@
               "url": "https://aneac.com.tw/",
               "label": ""
             },
-            "description": "<ul><li><p>以C# Winform開發光學材料檢測儀器的無紙化自動數據記錄系統，獨力完成前期需求訪談、建議書，中期的軟體開發、測試，後期的系統佈署、驗收，以仔細完善的規劃滿足客戶的需求並為公司帶來進一步的商業合作機會。</p></li></ul>"
+            "description": "<ul><li><p>以 C# Winform 開發光學材料檢測儀器的無紙化自動數據記錄系統，獨力完成前期需求訪談、建議書，中期的軟體開發、測試，後期的系統佈署、驗收，以仔細完善的規劃滿足客戶的需求並為公司帶來進一步的商業合作機會。</p></li></ul>"
           }
         ]
       },
@@ -193,7 +193,7 @@
             "name": "EDF5 Mission Record",
             "period": "",
             "website": {
-              "url": "http://rainbowrain.tw/edf5recorder/",
+              "url": "https://rainbowrain.tw/edf5recorder/",
               "label": ""
             },
             "description": ""
@@ -348,18 +348,11 @@
     },
     "customSections": [
       {
-        "title": "Project List",
-        "columns": 1,
-        "hidden": false,
-        "id": "lqrrng7s2ycxri5513q2vz6s",
-        "content": "<div style=\"margin-bottom: 1em;\"><h3>醫院診間叫號看板</h3><p>．C# Winform．串接 HIS 系統</p><div><p>將 HIS 提供的當日看診資料用 LinkedList 作排隊機制，控制一般叫號、過號處理、急件VIP插隊等功能，在雙螢幕分別呈現護理師及侯診病人各自的介面。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>光學檢測儀器數據收集</h3><p>．C# Winform ．Custom UI Control ．Serial Commucation ．MySQL</p><div><p>專案目的是協助把目前需透過人工目視抄寫的數據改由系統自動化流程來處理，加快產品檢驗的速度同時避免人工抄寫時可能發生的錯誤。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>化學檢測儀器數據收集</h3><p>．C# Winform ．Web SPA（Php & Vanilla JS） ．Serial Commucation、Web Socket、MQTT ．Linux Debian（Moxa SBC） ．SQL Server & MySQL</p><div><p>專案目的是將客戶手上數十種檢測儀器的檢測數據作整合，以便未來與SAP系統串接，本案難點在每種儀器的數據輸出模式不同，有些是產出檔案、有些只有列印功能就要透過橋接器，再去解析轉譯關鍵數據整合到資料庫。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>廣告機</h3><p>．Node.js（Express.js & Electorn.js） ．Azure ．Linux Debian（Raspberry Pi & Jetson Nano & TinkerBoard） ．Slack Webhooks API ．dataplicity（用於管理RasPi的付費服務）</p><div><p>主要負責的部份是在上述幾種單板電腦建立播放廣告頁面的框架，透過與 Azure 建立的微服務做 heartbeat 確認廣告機運作狀態，並在連線異常時透過 Slack Webhooks 發送警告。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>KIOSK自助點餐機</h3><p>．C# Winform ．Socket ．出單機 ．信用卡機 ．行動支付 ．SQL Server</p><div><p>本專案的點餐機適用於美食街等一場域多品牌賣場，可一次交易購買多家商店，透過 Multi Thread Socket 來管理交易訊息並與商店POS機、電子叫號看板等週邊設備連動。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>空氣品質警報</h3><p>．C# Winform ．LineBot ．Mono</p><div><p>資料來源是Gmail信箱的信件，定時檢查信件內容再透過LieBot發送警報，運行環境是在 RasPi4 上用 Mono 來跑 C# Winform，可在 GUI 上進行警報條件及發送對象等設定。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>車輛在席偵測</h3><p>．Python（Flask） ．MQTT ．LoRa、RS485 ．MySQL</p><div><p>本專案為露天停車場，原委外開發，但由於廠商資歷較淺，部份設計及功能經我指導後才能正常運作，例如原本有些報表要跑數十分鐘等問題。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>容流偵測系統</h3><p>．Node.js ．Linux Debian ．AI人流攝影機 ．MariaDB</p><div><p>獨力完成本案挑選採購AI辨識攝影機、系統分析規劃、程式開發到現場安裝調教等工作。程式在設計模式上考慮到未來可能更換攝影機，規劃按介面重寫攝影機模組。</p></div></div><div style=\"margin-bottom: 1em;\"><h3>地圖應用</h3><p>JavaScript、Node.js、React</p><div><p>使用公司自有產品的 SDK 來開發各種 Web GIS 應用，例如：住宅警報通知系統、太陽光電資訊看板、VR多人連線會議室等。</p></div></div>"
-      },
-      {
         "title": "Projects",
         "columns": 1,
         "hidden": false,
         "id": "019bdc2e-45d4-7127-9f79-9d4b60264488",
-        "content": "<h3>醫院診間叫號看板</h3><p>．C# Winform．串接 HIS 系統</p><p>將 HIS 提供的當日看診資料用 LinkedList 作排隊機制，控制一般叫號、過號處理、急件VIP插隊等功能，在雙螢幕分別呈現護理師及侯診病人各自的介面。</p><h3>光學檢測儀器數據收集</h3><p>．C# Winform ．Custom UI Control ．Serial Commucation ．MySQL</p><p>專案目的是協助把目前需透過人工目視抄寫的數據改由系統自動化流程來處理，加快產品檢驗的速度同時避免人工抄寫時可能發生的錯誤。</p><h3>化學檢測儀器數據收集</h3><p>．C# Winform ．Web SPA（Php &amp; Vanilla JS） ．Serial Commucation、Web Socket、MQTT ．Linux Debian（Moxa SBC） ．SQL Server &amp; MySQL</p><p>專案目的是將客戶手上數十種檢測儀器的檢測數據作整合，以便未來與SAP系統串接，本案難點在每種儀器的數據輸出模式不同，有些是產出檔案、有些只有列印功能就要透過橋接器，再去解析轉譯關鍵數據整合到資料庫。</p><h3>廣告機</h3><p>．Node.js（Express.js &amp; Electorn.js） ．Azure ．Linux Debian（Raspberry Pi &amp; Jetson Nano &amp; TinkerBoard） ．Slack Webhooks API ．dataplicity（用於管理RasPi的付費服務）</p><p>主要負責的部份是在上述幾種單板電腦建立播放廣告頁面的框架，透過與 Azure 建立的微服務做 heartbeat 確認廣告機運作狀態，並在連線異常時透過 Slack Webhooks 發送警告。</p><h3>KIOSK自助點餐機</h3><p>．C# Winform ．Socket ．出單機 ．信用卡機 ．行動支付 ．SQL Server</p><p>本專案的點餐機適用於美食街等一場域多品牌賣場，可一次交易購買多家商店，透過 Multi Thread Socket 來管理交易訊息並與商店POS機、電子叫號看板等週邊設備連動。</p><h3>空氣品質警報</h3><p>．C# Winform ．LineBot ．Mono</p><p>資料來源是Gmail信箱的信件，定時檢查信件內容再透過LieBot發送警報，運行環境是在 RasPi4 上用 Mono 來跑 C# Winform，可在 GUI 上進行警報條件及發送對象等設定。</p><h3>車輛在席偵測</h3><p>．Python（Flask） ．MQTT ．LoRa、RS485 ．MySQL</p><p>本專案為露天停車場，原委外開發，但由於廠商資歷較淺，部份設計及功能經我指導後才能正常運作，例如原本有些報表要跑數十分鐘等問題。</p><h3>容流偵測系統</h3><p>．Node.js ．Linux Debian ．AI人流攝影機 ．MariaDB</p><p>獨力完成本案挑選採購AI辨識攝影機、系統分析規劃、程式開發到現場安裝調教等工作。程式在設計模式上考慮到未來可能更換攝影機，規劃按介面重寫攝影機模組。</p><h3>地圖應用</h3><p>JavaScript、Node.js、React</p><p>使用公司自有產品的 SDK 來開發各種 Web GIS 應用，例如：住宅警報通知系統、太陽光電資訊看板、VR多人連線會議室等。</p>"
+        "content": "<h3>醫院診間叫號看板</h3><p>．C# Winform．串接 HIS 系統</p><p>將 HIS 提供的當日看診資料用 LinkedList 作排隊機制，控制一般叫號、過號處理、急件 VIP 插隊等功能，在雙螢幕分別呈現護理師及侯診病人各自的介面。</p><h3>光學檢測儀器數據收集</h3><p>．C# Winform ．Custom UI Control ．Serial Commucation ．MySQL</p><p>專案目的是協助把目前需透過人工目視抄寫的數據改由系統自動化流程來處理，加快產品檢驗的速度同時避免人工抄寫時可能發生的錯誤。</p><h3>化學檢測儀器數據收集</h3><p>．C# Winform ．Web SPA（Php &amp; Vanilla JS） ．Serial Commucation、Web Socket、MQTT ．Linux Debian（Moxa SBC） ．SQL Server &amp; MySQL</p><p>專案目的是將客戶手上數十種檢測儀器的檢測數據作整合，以便未來與 SAP 系統串接，本案難點在每種儀器的數據輸出模式不同，有些是產出檔案、有些只有列印功能就要透過橋接器，再去解析轉譯關鍵數據整合到資料庫。</p><h3>廣告機</h3><p>．Node.js（Express.js &amp; Electorn.js） ．Azure ．Linux Debian（Raspberry Pi &amp; Jetson Nano &amp; TinkerBoard） ．Slack Webhooks API ．dataplicity（用於管理RasPi的付費服務）</p><p>主要負責的部份是在上述幾種單板電腦建立播放廣告頁面的框架，透過與 Azure 建立的微服務做 heartbeat 確認廣告機運作狀態，並在連線異常時透過 Slack Webhooks 發送警告。</p><h3>KIOSK自助點餐機</h3><p>．C# Winform ．Socket ．出單機 ．信用卡機 ．行動支付 ．SQL Server</p><p>本專案的點餐機適用於美食街等一場域多品牌賣場，可一次交易購買多家商店，透過 Multi Thread Socket 來管理交易訊息並與商店POS機、電子叫號看板等週邊設備連動。</p><h3>空氣品質警報</h3><p>．C# Winform ．LineBot ．Mono</p><p>資料來源是 Gmail 信箱的信件，定時檢查信件內容再透過 LineBot 發送警報，運行環境是在 RasPi4 上用 Mono 來跑 C# Winform，可在 GUI 上進行警報條件及發送對象等設定。</p><h3>車輛在席偵測</h3><p>．Python（Flask） ．MQTT ．LoRa、RS485 ．MySQL</p><p>本專案為露天停車場，原委外開發，但由於廠商資歷較淺，部份設計及功能經我指導後才能正常運作，例如原本有些報表要跑數十分鐘等問題。</p><h3>容流偵測系統</h3><p>．Node.js ．Linux Debian ．AI人流攝影機 ．MariaDB</p><p>獨力完成本案挑選採購 AI 辨識攝影機、系統分析規劃、程式開發到現場安裝調教等工作。程式在設計模式上考慮到未來可能更換攝影機，規劃按介面重寫攝影機模組。</p><h3>地圖應用</h3><p>JavaScript、Node.js、React</p><p>使用公司自有產品的 SDK 來開發各種 Web GIS 應用，例如：住宅警報通知系統、太陽光電資訊看板、VR 多人連線會議室等。</p>"
       }
     ],
     "metadata": {
