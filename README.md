@@ -1,6 +1,6 @@
 # 互動式 AI 履歷（Vite + React + TypeScript）
 
-一個把「履歷」做成可互動產品的實驗：左側直接瀏覽履歷內容，右側透過聊天向 AI 詢問我的經歷、技能與專案細節。  
+一個把「履歷」做成可互動產品的實驗：右側直接瀏覽履歷內容，左側透過聊天向 AI 詢問我的經歷、技能與專案細節。  
 前端為單頁應用（SPA），後端使用 Google Apps Script（GAS），並以 Google Spreadsheet 保存必要的對話與分析 Logs；同時內建 GitHub Pages 自動部署設定。
 
 ## 專案 DEMO
