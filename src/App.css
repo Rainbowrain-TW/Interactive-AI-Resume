@@ -76,6 +76,11 @@
   white-space: pre-wrap;
 }
 
+.chat-link {
+  color: royalblue;
+  text-decoration: underline;
+}
+
 .chat-role {
   display: block;
   font-weight: 600;

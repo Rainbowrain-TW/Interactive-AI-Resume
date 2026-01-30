@@ -95,6 +95,37 @@ const buildChatLog = (messages: ChatMessage[]) => {
     .join('\n\n');
 };
 
+const quotaExceededMessage =
+  '很抱歉、目前伺服器的服務資源用量已達本日上限。請您明天再試。\n\n或連絡：rainbowrain0930@gmail.com';
+const contactEmail = 'rainbowrain0930@gmail.com';
+
+const renderMessageContent = (content: string) => {
+  if (!content.includes(contactEmail)) {
+    return content;
+  }
+
+  const parts = content.split(contactEmail);
+  return (
+    <>
+      {parts.map((part, index) => (
+        <span key={`${part}-${index}`}>
+          {part}
+          {index < parts.length - 1 ? (
+            <a
+              className="chat-link"
+              href={`mailto:${contactEmail}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {contactEmail}
+            </a>
+          ) : null}
+        </span>
+      ))}
+    </>
+  );
+};
+
 const ChatPanel = ({ resume }: ChatPanelProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState('');
@@ -190,7 +221,16 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
         throw new Error(`Request failed: ${response.status}`);
       }
 
-      const data = (await response.json()) as { id?: string; text?: string };
+      const data = (await response.json()) as { id?: string; text?: string; error?: string };
+      if (data.error === 'Daily quota exceeded.') {
+        const assistantMessage: ChatMessage = {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          content: quotaExceededMessage
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+        return;
+      }
       const assistantMessage: ChatMessage = {
         id: data.id ?? `assistant-${Date.now()}`,
         role: 'assistant',
@@ -264,7 +304,7 @@ const ChatPanel = ({ resume }: ChatPanelProps) => {
         {messages.map((message) => (
           <div key={message.id} className={`chat-message ${message.role}`}>
             <span className="chat-role">{message.role === 'user' ? '你' : 'AI'}</span>
-            <p>{message.content}</p>
+            <p>{renderMessageContent(message.content)}</p>
           </div>
         ))}
         {isLoading && (
