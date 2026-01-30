@@ -8,7 +8,7 @@
 [Live Demo](https://rainbowrain-tw.github.io/Interactive-AI-Resume/)
 
 <p>
-	<img src="doc/IAR_Desktop.png" alt="Desktop Demo" height="320" weight="65%" />   
+	<img src="doc/IAR_Desktop.png" alt="Desktop Demo" height="320" weight="65%" /> &nbsp;&nbsp;&nbsp;  
 	<img src="doc/IAR_Mobile.png" alt="Mobile Demo" height="320" weight="34%" />
 </p>
 
