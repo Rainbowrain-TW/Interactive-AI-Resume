@@ -298,6 +298,7 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   };
 
   const handleQuickQuestion = (question: string) => {
+    setIsQuickQuestionsOpen(false);
     void sendMessageWithContent(question, true);
   };
 

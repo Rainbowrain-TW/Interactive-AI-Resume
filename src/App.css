@@ -99,6 +99,7 @@
   flex-direction: column;
   gap: 16px;
   overflow: hidden;
+  min-height: 0;
 }
 
 .resume-wrapper {
@@ -152,12 +153,15 @@
 }
 
 .chat-messages {
-  flex: 1;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding-right: 4px;
   overflow-y: auto;
+  min-height: 0;
+  position: relative;
+  z-index: 0;
 }
 
 .chat-message {
@@ -198,6 +202,9 @@
   display: flex;
   gap: 8px;
   align-items: flex-end;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .chat-input textarea {
@@ -230,6 +237,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .quick-questions-header {
@@ -309,6 +319,7 @@
   align-items: flex-end;
   gap: 8px;
   z-index: 20;
+  pointer-events: none;
 }
 
 .action-widget-button {
@@ -321,6 +332,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(65, 105, 225, 0.3);
+  pointer-events: auto;
 }
 
 .action-widget-menu {
@@ -520,6 +532,10 @@
     display: none;
   }
 
+  .chat-panel .chat-toggle {
+    display: inline-flex;
+  }
+
   .quick-questions.is-collapsed .quick-questions-list {
     display: none;
   }
@@ -538,5 +554,15 @@
 
   .intro-content {
     margin-top: 12px;
+  }
+}
+
+@media (min-width: 769px) {
+  .chat-toggle {
+    display: none;
+  }
+
+  .quick-questions-toggle {
+    display: none;
   }
 }
