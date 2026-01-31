@@ -5,11 +5,18 @@ interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  token?: TokenUsage;
 }
 
 interface ChatPanelProps {
   resume?: ResumeData;
   onOpenIntro?: () => void;
+}
+
+interface TokenUsage {
+  input: number;
+  cached: number;
+  output: number;
 }
 
 const initialMessages: ChatMessage[] = [
@@ -28,7 +35,7 @@ const quickQuestions = [
 ];
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbxtiajVpb8kqLr-iKmWnVa1_BJtgwiEUDbPAHrvllhKkGb8U2Obsx_lZKSvI8iB-wSI/exec';
+  'https://script.google.com/macros/s/AKfycbxjjXPXXJLo_-hJL_ljB-Qo_CdnCbG71mZFb-bgmAdGq7TISzCnqgfdbkRqYRFRumFX/exec'
 
 const CID_KEY = 'interactive-ai-resume-cid';
 const SID_KEY = 'interactive-ai-resume-sid';
@@ -127,6 +134,13 @@ const renderMessageContent = (content: string) => {
   );
 };
 
+const formatTokenTooltip = (token?: TokenUsage) => {
+  if (!token) {
+    return '無 token 資訊';
+  }
+  return `Input: ${token.input}, Cached: ${token.cached}, Output: ${token.output}`;
+};
+
 const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState('');
@@ -137,16 +151,181 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
     getSessionValue(PREVIOUS_RESPONSE_KEY, 'none')
   );
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const actionWidgetRef = useRef<HTMLDivElement | null>(null);
   const hideMenuTimerRef = useRef<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [chatSize, setChatSize] = useState<'default' | 'collapsed' | 'expanded'>('default');
   const [isQuickQuestionsOpen, setIsQuickQuestionsOpen] = useState(false);
+  const [activeTokenMessageId, setActiveTokenMessageId] = useState<string | null>(null);
+  const [isTokenStatsOpen, setIsTokenStatsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    return window.matchMedia('(max-width: 768px)').matches;
+  });
+  const longPressTimerRef = useRef<number | null>(null);
+  const tokenStatsLongPressTimerRef = useRef<number | null>(null);
+
+  const tokenStats = useMemo(() => {
+    return messages.reduce(
+      (acc, message) => {
+        if (message.role !== 'assistant' || !message.token) {
+          return acc;
+        }
+        acc.totalInput += message.token.input;
+        acc.totalCached += message.token.cached;
+        acc.totalOutput += message.token.output;
+        acc.totalRequest += 1;
+        return acc;
+      },
+      { totalInput: 0, totalCached: 0, totalOutput: 0, totalRequest: 0 }
+    );
+  }, [messages]);
+
+  const tokenStatsTooltip = isMobile
+    ? `Total Input: ${tokenStats.totalInput}\nTotal Cached Input: ${tokenStats.totalCached}\nTotal Output: ${tokenStats.totalOutput}\nTotal Request: ${tokenStats.totalRequest}`
+    : `{Total Input: ${tokenStats.totalInput}, ` +
+    `Total Cached Input: ${tokenStats.totalCached}, ` +
+    `Total Output: ${tokenStats.totalOutput}, ` +
+    `Total Request: ${tokenStats.totalRequest}}`;
+
+  const handleTokenEnter = (messageId: string) => {
+    if (isMobile) {
+      return;
+    }
+    setActiveTokenMessageId(messageId);
+  };
+
+  const handleTokenLeave = (event?: React.PointerEvent) => {
+    if (event?.pointerType === 'touch' || isMobile) {
+      return;
+    }
+    setActiveTokenMessageId(null);
+  };
+
+  const handleTokenClick = (messageId: string) => {
+    setActiveTokenMessageId((current) => (current === messageId ? null : messageId));
+  };
+
+  const handleTokenStatsEnter = () => {
+    if (isMobile) {
+      return;
+    }
+    setIsTokenStatsOpen(true);
+    setIsMenuOpen(true);
+    clearHideMenuTimer();
+  };
+
+  const handleTokenStatsLeave = (event?: React.PointerEvent) => {
+    if (event?.pointerType === 'touch' || isMobile) {
+      return;
+    }
+    setIsTokenStatsOpen(false);
+  };
+
+  const handleTokenStatsClick = () => {
+    setIsTokenStatsOpen((current) => !current);
+    setIsMenuOpen(true);
+    clearHideMenuTimer();
+  };
 
   const canSend = useMemo(() => input.trim().length > 0 && !isLoading, [input, isLoading]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(media.matches);
+    update();
+    if ('addEventListener' in media) {
+      media.addEventListener('change', update);
+      return () => media.removeEventListener('change', update);
+    }
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      return;
+    }
+
+    const handleGlobalPointerDown = (event?: Event) => {
+      const target = event?.target as Node | null;
+      if (target && actionWidgetRef.current?.contains(target)) {
+        return;
+      }
+      setActiveTokenMessageId(null);
+      setIsTokenStatsOpen(false);
+    };
+
+    const handleGlobalScroll = () => {
+      setActiveTokenMessageId(null);
+      setIsTokenStatsOpen(false);
+    };
+
+    document.addEventListener('pointerdown', handleGlobalPointerDown, true);
+    window.addEventListener('scroll', handleGlobalScroll, true);
+    return () => {
+      document.removeEventListener('pointerdown', handleGlobalPointerDown, true);
+      window.removeEventListener('scroll', handleGlobalScroll, true);
+    };
+  }, [isMobile]);
+
+  const clearLongPressTimer = () => {
+    if (longPressTimerRef.current) {
+      window.clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  const clearTokenStatsLongPressTimer = () => {
+    if (tokenStatsLongPressTimerRef.current) {
+      window.clearTimeout(tokenStatsLongPressTimerRef.current);
+      tokenStatsLongPressTimerRef.current = null;
+    }
+  };
+
+  const handleTokenPointerDown = (messageId: string) => {
+    if (!isMobile) {
+      return;
+    }
+    clearLongPressTimer();
+    longPressTimerRef.current = window.setTimeout(() => {
+      setActiveTokenMessageId(messageId);
+    }, 350);
+  };
+
+  const handleTokenPointerUp = (messageId: string) => {
+    if (!isMobile) {
+      return;
+    }
+    clearLongPressTimer();
+    setActiveTokenMessageId((current) => (current === messageId ? null : messageId));
+  };
+
+  const handleTokenStatsPointerDown = () => {
+    if (!isMobile) {
+      return;
+    }
+    clearTokenStatsLongPressTimer();
+    tokenStatsLongPressTimerRef.current = window.setTimeout(() => {
+      setIsTokenStatsOpen(true);
+      setIsMenuOpen(true);
+    }, 350);
+  };
+
+  const handleTokenStatsPointerUp = () => {
+    if (!isMobile) {
+      return;
+    }
+    clearTokenStatsLongPressTimer();
+    setIsTokenStatsOpen((current) => !current);
+    setIsMenuOpen(true);
+  };
 
   const updatePreviousResponseId = (nextId: string) => {
     setPreviousResponseId(nextId);
@@ -167,21 +346,45 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
     }, 300);
   };
 
-  const handleMenuButtonEnter = () => {
+  const handleMenuButtonEnter = (event?: React.PointerEvent) => {
+    if (event?.pointerType === 'touch') {
+      return;
+    }
     clearHideMenuTimer();
     setIsMenuOpen(true);
   };
 
-  const handleMenuButtonLeave = () => {
+  const handleMenuButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (!isMobile) {
+      return;
+    }
+    event.stopPropagation();
+    clearHideMenuTimer();
+    setIsMenuOpen((current) => !current);
+  };
+
+  const handleMenuButtonLeave = (event?: React.PointerEvent) => {
+    if (isMobile || event?.pointerType === 'touch') {
+      return;
+    }
     scheduleHideMenu();
   };
 
-  const handleMenuEnter = () => {
+  const handleMenuEnter = (event?: React.PointerEvent) => {
+    if (event?.pointerType === 'touch') {
+      return;
+    }
     clearHideMenuTimer();
     setIsMenuOpen(true);
   };
 
-  const handleMenuLeave = () => {
+  const handleMenuLeave = (event?: React.PointerEvent) => {
+    if (isMobile || event?.pointerType === 'touch') {
+      return;
+    }
+    if (isTokenStatsOpen) {
+      return;
+    }
     scheduleHideMenu();
   };
 
@@ -254,7 +457,12 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
         throw new Error(`Request failed: ${response.status}`);
       }
 
-      const data = (await response.json()) as { id?: string; text?: string; error?: string };
+      const data = (await response.json()) as {
+        id?: string;
+        text?: string;
+        error?: string;
+        token?: TokenUsage;
+      };
       if (data.error === 'Daily quota exceeded.') {
         const assistantMessage: ChatMessage = {
           id: `assistant-${Date.now()}`,
@@ -267,7 +475,8 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
       const assistantMessage: ChatMessage = {
         id: data.id ?? `assistant-${Date.now()}`,
         role: 'assistant',
-        content: data.text ?? '目前沒有回覆內容。'
+        content: data.text ?? '目前沒有回覆內容。',
+        token: data.token
       };
       setMessages((prev) => [...prev, assistantMessage]);
       if (data.id) {
@@ -356,6 +565,35 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
           <div key={message.id} className={`chat-message ${message.role}`}>
             <span className="chat-role">{message.role === 'user' ? '你' : 'AI'}</span>
             <p>{renderMessageContent(message.content)}</p>
+            {message.role === 'assistant' && (
+              <span className="chat-token-wrapper">
+                <button
+                  type="button"
+                  className="chat-token"
+                  onPointerEnter={() => handleTokenEnter(message.id)}
+                  onPointerLeave={handleTokenLeave}
+                  onPointerDown={() => handleTokenPointerDown(message.id)}
+                  onPointerUp={() => handleTokenPointerUp(message.id)}
+                  onClick={(event) => {
+                    if (isMobile) {
+                      event.stopPropagation();
+                    } else {
+                      handleTokenClick(message.id);
+                    }
+                  }}
+                  aria-label={`Token 用量 ${formatTokenTooltip(message.token)}`}
+                >
+                  i
+                </button>
+                <span
+                  className={`chat-tooltip ${activeTokenMessageId === message.id ? 'is-visible' : ''
+                    }`}
+                  role="tooltip"
+                >
+                  {formatTokenTooltip(message.token)}
+                </span>
+              </span>
+            )}
           </div>
         ))}
         {isLoading && (
@@ -413,23 +651,29 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
           {isLoading ? '回覆中' : '送出'}
         </button>
       </form>
-      <div className="action-widget" aria-label="工具">
+      <div className="action-widget" aria-label="工具" ref={actionWidgetRef}>
         <button
           type="button"
           className="action-widget-button"
           aria-label="開啟工具"
-          onMouseEnter={handleMenuButtonEnter}
-          onMouseLeave={handleMenuButtonLeave}
+          onPointerEnter={handleMenuButtonEnter}
+          onPointerLeave={handleMenuButtonLeave}
           onFocus={handleMenuButtonEnter}
           onBlur={handleMenuButtonLeave}
+          onClick={handleMenuButtonClick}
         >
           ☰
         </button>
         <div
           className={`action-widget-menu ${isMenuOpen ? 'is-open' : ''}`}
           role="menu"
-          onMouseEnter={handleMenuEnter}
-          onMouseLeave={handleMenuLeave}
+          onPointerEnter={handleMenuEnter}
+          onPointerLeave={handleMenuLeave}
+          onClick={(event) => {
+            if (isMobile) {
+              event.stopPropagation();
+            }
+          }}
         >
           <a className="action-widget-link" href={resumePdfUrl} download>
             下載履歷PDF
@@ -440,6 +684,33 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
           <button type="button" className="action-widget-link" onClick={onOpenIntro}>
             查看說明
           </button>
+          <span className="token-stats-wrapper">
+            <button
+              type="button"
+              className="action-widget-link"
+              onPointerEnter={handleTokenStatsEnter}
+              onPointerLeave={handleTokenStatsLeave}
+              onPointerDown={handleTokenStatsPointerDown}
+              onPointerUp={handleTokenStatsPointerUp}
+              onClick={(event) => {
+                if (isMobile) {
+                  event.stopPropagation();
+                } else {
+                  handleTokenStatsClick();
+                }
+              }}
+              aria-label={`TOKEN 統計 ${tokenStatsTooltip}`}
+            >
+              TOKEN統計
+            </button>
+            <span
+              className={`chat-tooltip token-stats-tooltip ${isTokenStatsOpen ? 'is-visible' : ''
+                }`}
+              role="tooltip"
+            >
+              {tokenStatsTooltip}
+            </span>
+          </span>
         </div>
       </div>
     </section>

@@ -168,8 +168,11 @@
   background: rgba(65, 105, 225, 0.08);
   border-radius: 12px;
   padding: 12px 14px;
+  padding-right: 34px;
+  padding-bottom: 26px;
   line-height: 1.5;
   max-width: 80%;
+  position: relative;
 }
 
 .chat-message.user {
@@ -192,10 +195,82 @@
 }
 
 .chat-role {
-  display: block;
   font-weight: 600;
   margin-bottom: 6px;
   color: royalblue;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chat-token {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(65, 105, 225, 0.4);
+  background: #ffffff;
+  color: #1f2a44;
+  font-size: 0.7rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.chat-token-wrapper,
+.token-stats-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.chat-token-wrapper {
+  position: absolute;
+  right: -24px;
+  bottom: 4px;
+}
+
+.chat-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  margin-bottom: 6px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: royalblue;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-2px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+}
+
+@media (max-width: 768px) {
+  .chat-tooltip {
+    white-space: pre-line;
+    max-width: 80vh;
+  }
+}
+
+.chat-tooltip.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  width: max-content;
+}
+
+.token-stats-tooltip {
+  right: 0;
+  left: auto;
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 6px;
 }
 
 .chat-input {
