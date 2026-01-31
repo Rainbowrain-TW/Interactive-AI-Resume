@@ -255,16 +255,24 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
 
     const handleGlobalPointerDown = (event?: Event) => {
       const target = event?.target as Node | null;
+      if (isTokenStatsOpen) {
+        setIsTokenStatsOpen(false);
+        return;
+      }
       if (target && actionWidgetRef.current?.contains(target)) {
         return;
       }
       setActiveTokenMessageId(null);
-      setIsTokenStatsOpen(false);
+      setIsMenuOpen(false);
     };
 
     const handleGlobalScroll = () => {
+      if (isTokenStatsOpen) {
+        setIsTokenStatsOpen(false);
+        return;
+      }
       setActiveTokenMessageId(null);
-      setIsTokenStatsOpen(false);
+      setIsMenuOpen(false);
     };
 
     document.addEventListener('pointerdown', handleGlobalPointerDown, true);
@@ -273,7 +281,7 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
       document.removeEventListener('pointerdown', handleGlobalPointerDown, true);
       window.removeEventListener('scroll', handleGlobalScroll, true);
     };
-  }, [isMobile]);
+  }, [isMobile, isTokenStatsOpen]);
 
   const clearLongPressTimer = () => {
     if (longPressTimerRef.current) {
@@ -675,13 +683,40 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
             }
           }}
         >
-          <a className="action-widget-link" href={resumePdfUrl} download>
+          <a
+            className="action-widget-link"
+            href={resumePdfUrl}
+            download
+            onClick={() => {
+              if (isMobile) {
+                setIsMenuOpen(false);
+              }
+            }}
+          >
             下載履歷PDF
           </a>
-          <button type="button" className="action-widget-link" onClick={handleDownloadChat}>
+          <button
+            type="button"
+            className="action-widget-link"
+            onClick={() => {
+              handleDownloadChat();
+              if (isMobile) {
+                setIsMenuOpen(false);
+              }
+            }}
+          >
             下載對話記錄
           </button>
-          <button type="button" className="action-widget-link" onClick={onOpenIntro}>
+          <button
+            type="button"
+            className="action-widget-link"
+            onClick={() => {
+              onOpenIntro?.();
+              if (isMobile) {
+                setIsMenuOpen(false);
+              }
+            }}
+          >
             查看說明
           </button>
           <span className="token-stats-wrapper">
