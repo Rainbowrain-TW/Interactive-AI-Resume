@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 const API_URL =
-    'https://script.google.com/macros/s/AKfycbxtiajVpb8kqLr-iKmWnVa1_BJtgwiEUDbPAHrvllhKkGb8U2Obsx_lZKSvI8iB-wSI/exec';
+    'https://script.google.com/macros/s/AKfycbxjjXPXXJLo_-hJL_ljB-Qo_CdnCbG71mZFb-bgmAdGq7TISzCnqgfdbkRqYRFRumFX/exec';
 
 const getStorageValue = async (page, key: string, type: 'local' | 'session') => {
     return page.evaluate(
@@ -17,8 +17,16 @@ const CID_KEY = 'interactive-ai-resume-cid';
 const SID_KEY = 'interactive-ai-resume-sid';
 const PREVIOUS_RESPONSE_KEY = 'interactive-ai-resume-previous-response-id';
 
+const dismissIntroIfVisible = async (page) => {
+    const startButton = page.getByRole('button', { name: '開始使用' });
+    if (await startButton.isVisible()) {
+        await startButton.click();
+    }
+};
+
 test('stores cid/sid, persists sid on reload, new tab gets new sid', async ({ page, context }) => {
     await page.goto('/');
+    await dismissIntroIfVisible(page);
 
     const cid = await getStorageValue(page, CID_KEY, 'local');
     const sid = await getStorageValue(page, SID_KEY, 'session');
@@ -59,6 +67,7 @@ test('shift+enter inserts newline and enter sends message', async ({ page }) => 
     });
 
     await page.goto('/');
+    await dismissIntroIfVisible(page);
     const input = page.getByLabel('聊天輸入');
 
     await input.click();
@@ -94,6 +103,7 @@ test('sends payload and updates previous_response_id for multi-turn', async ({ p
     });
 
     await page.goto('/');
+    await dismissIntroIfVisible(page);
     const input = page.getByLabel('聊天輸入');
 
     await input.fill('第一個問題');

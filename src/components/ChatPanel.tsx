@@ -240,12 +240,8 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
     const media = window.matchMedia('(max-width: 768px)');
     const update = () => setIsMobile(media.matches);
     update();
-    if ('addEventListener' in media) {
-      media.addEventListener('change', update);
-      return () => media.removeEventListener('change', update);
-    }
-    media.addListener(update);
-    return () => media.removeListener(update);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
   }, []);
 
   useEffect(() => {
@@ -362,6 +358,11 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
     setIsMenuOpen(true);
   };
 
+  const handleMenuButtonFocus = () => {
+    clearHideMenuTimer();
+    setIsMenuOpen(true);
+  };
+
   const handleMenuButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (isMobile) {
       return;
@@ -382,6 +383,13 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
 
   const handleMenuButtonLeave = (event?: React.PointerEvent) => {
     if (isMobile || event?.pointerType === 'touch') {
+      return;
+    }
+    scheduleHideMenu();
+  };
+
+  const handleMenuButtonBlur = () => {
+    if (isMobile) {
       return;
     }
     scheduleHideMenu();
@@ -675,8 +683,8 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
           aria-label="開啟工具"
           onPointerEnter={handleMenuButtonEnter}
           onPointerLeave={handleMenuButtonLeave}
-          onFocus={handleMenuButtonEnter}
-          onBlur={handleMenuButtonLeave}
+          onFocus={handleMenuButtonFocus}
+          onBlur={handleMenuButtonBlur}
           onPointerDown={handleMenuButtonPointerDown}
           onClick={handleMenuButtonClick}
         >
