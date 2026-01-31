@@ -363,6 +363,15 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
   };
 
   const handleMenuButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (isMobile) {
+      return;
+    }
+    event.stopPropagation();
+    clearHideMenuTimer();
+    setIsMenuOpen((current) => !current);
+  };
+
+  const handleMenuButtonPointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
     if (!isMobile) {
       return;
     }
@@ -668,6 +677,7 @@ const ChatPanel = ({ resume, onOpenIntro }: ChatPanelProps) => {
           onPointerLeave={handleMenuButtonLeave}
           onFocus={handleMenuButtonEnter}
           onBlur={handleMenuButtonLeave}
+          onPointerDown={handleMenuButtonPointerDown}
           onClick={handleMenuButtonClick}
         >
           ☰
